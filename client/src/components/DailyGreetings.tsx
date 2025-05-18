@@ -25,6 +25,7 @@ const DailyGreetings = ({ openTransactionModal }: DailyGreetingsProps) => {
   const [messageError, setMessageError] = useState("");
   const [mintAsNFT, setMintAsNFT] = useState(false);
   const [title, setTitle] = useState("My Greeting NFT");
+  const [showNFTPreview, setShowNFTPreview] = useState(false);
   
   const isLoading = isGreetingLoading || isNFTLoading;
   
