@@ -1,0 +1,52 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract CustomTextNFT is ERC721URIStorage, Ownable {
+    using Counters for Counters.Counter;
+    Counters.Counter private _tokenIds;
+
+    uint256 public mintingFee = 0.000032 ether;
+    address public feeRecipient = 0x521b85b6F387e7A66a25C8d0A4799FC387f37D1F;
+
+    constructor() ERC721("CustomTextNFT", "CTNFT") Ownable(msg.sender) {}
+
+    function mintNFT(address recipient, string memory _tokenURI) public payable returns (uint256) {
+        require(msg.value >= mintingFee, "Importo ETH insufficiente per il minting.");
+
+        _tokenIds.increment();
+        uint256 newItemId = _tokenIds.current();
+        _safeMint(recipient, newItemId);
+        _setTokenURI(newItemId, _tokenURI); // Ora funziona grazie a ERC721URIStorage
+
+        (bool success, ) = payable(feeRecipient).call{value: mintingFee}("");
+        require(success, "Trasferimento della commissione fallito.");
+
+        emit NFTMinted(newItemId, recipient, _tokenURI, msg.value, feeRecipient);
+        return newItemId;
+    }
+
+    function setMintingFee(uint256 _newFee) public onlyOwner {
+        mintingFee = _newFee;
+    }
+
+    function setFeeRecipient(address _newRecipient) public onlyOwner {
+        feeRecipient = _newRecipient;
+    }
+
+    function withdraw() public onlyOwner {
+        uint256 balance = address(this).balance;
+        require(balance > 0, "Nessun ETH da prelevare (dopo l'invio automatico delle commissioni).");
+        (bool success, ) = payable(owner()).call{value: balance}("");
+        require(success, "Trasferimento ETH fallito.");
+    }
+
+    function tokenURI(uint256 tokenId) public view override returns (string memory) {
+        return super.tokenURI(tokenId);
+    }
+
+    event NFTMinted(uint256 tokenId, address recipient, string tokenURI, uint256 feePaid, address feeRecipient);
+}
