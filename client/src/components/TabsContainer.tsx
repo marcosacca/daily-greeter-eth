@@ -1,6 +1,6 @@
 import { Tab } from "@/pages/Home";
 import { useTranslation } from "@/lib/hooks/useTranslation";
-import { MessageSquareText, ImageIcon, ArchiveIcon, ListIcon } from "lucide-react";
+import { MessageSquareText, ArchiveIcon, ListIcon } from "lucide-react";
 
 interface TabsContainerProps {
   activeTab: Tab;
@@ -12,7 +12,6 @@ const TabsContainer = ({ activeTab, setActiveTab }: TabsContainerProps) => {
   
   const tabs = [
     { id: "daily-greetings", label: t("dailyGreetings"), icon: <MessageSquareText className="h-4 w-4 mr-2" /> },
-    { id: "create-nft", label: t("createNFT"), icon: <ImageIcon className="h-4 w-4 mr-2" /> },
     { id: "my-collection", label: t("myCollection"), icon: <ArchiveIcon className="h-4 w-4 mr-2" /> },
     { id: "transactions", label: t("transactions"), icon: <ListIcon className="h-4 w-4 mr-2" /> }
   ];

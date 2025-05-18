@@ -5,7 +5,7 @@
   "createNFT": "Create NFT",
   "myCollection": "My Collection",
   "transactions": "Transactions",
-  "yourGreetingMessage": "Your Greeting Message (280 chars max)",
+  "yourGreetingMessage": "Your Greeting Message (20 chars max)",
   "enterGreetingMessage": "Enter your greeting message...",
   "sendDailyGreeting": "Send Daily Greeting",
   "transactionDetails": "Transaction Details",

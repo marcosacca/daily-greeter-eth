@@ -6,43 +6,23 @@ import { formatAddress } from "@/lib/utils/format";
 
 const AppHeader = () => {
   const { account, connectWallet } = useWallet();
-  const { t, language, changeLanguage } = useTranslation();
+  const { t } = useTranslation();
 
   return (
-    <header className="bg-white shadow-sm">
+    <header className="bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
           <div className="flex items-center space-x-2">
             <SmileIcon className="h-8 w-8 text-primary" />
-            <h1 className="text-xl font-bold text-primary-700">CryptoGreeter</h1>
+            <h1 className="text-xl font-bold gradient-text">GreetingNFT</h1>
           </div>
           
-          <div className="flex items-center space-x-4">
-            {/* Language Selector */}
-            <div className="hidden md:flex">
-              <Button
-                variant={language === "it" ? "default" : "outline"}
-                size="sm"
-                className={`rounded-l-md rounded-r-none ${language === "it" ? "bg-primary text-white" : "bg-gray-100 text-gray-600"}`}
-                onClick={() => changeLanguage("it")}
-              >
-                IT
-              </Button>
-              <Button
-                variant={language === "en" ? "default" : "outline"}
-                size="sm"
-                className={`rounded-r-md rounded-l-none ${language === "en" ? "bg-primary text-white" : "bg-gray-100 text-gray-600"}`}
-                onClick={() => changeLanguage("en")}
-              >
-                EN
-              </Button>
-            </div>
-            
+          <div className="flex items-center space-x-4">            
             {/* Connect Wallet Button / Account Display */}
             {!account ? (
               <Button 
                 onClick={connectWallet} 
-                className="flex items-center space-x-2"
+                className="flex items-center space-x-2 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700"
               >
                 <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M21 12V7H5C4.46957 7 3.96086 6.78929 3.58579 6.41421C3.21071 6.03914 3 5.53043 3 5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19V7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -52,7 +32,7 @@ const AppHeader = () => {
                 <span>{t("connectWallet")}</span>
               </Button>
             ) : (
-              <div className="flex items-center gap-2 py-1 px-3 bg-gray-100 rounded-md">
+              <div className="flex items-center gap-2 py-1 px-3 bg-gradient-to-r from-green-100 to-blue-100 rounded-md border border-green-200">
                 <div className="h-2 w-2 rounded-full bg-green-400"></div>
                 <span className="text-sm font-medium text-gray-700 truncate max-w-[120px]">
                   {formatAddress(account)}

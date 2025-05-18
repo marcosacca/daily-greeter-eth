@@ -25,7 +25,7 @@ const DailyGreetings = ({ openTransactionModal }: DailyGreetingsProps) => {
     const value = e.target.value;
     setMessage(value);
     
-    if (value.length > 280) {
+    if (value.length > 20) {
       setMessageError(t("messageTooLong"));
     } else {
       setMessageError("");
@@ -33,7 +33,7 @@ const DailyGreetings = ({ openTransactionModal }: DailyGreetingsProps) => {
   };
   
   const handleSendGreeting = async () => {
-    if (!account || !message || message.length > 280 || isLoading) return;
+    if (!account || !message || message.length > 20 || isLoading) return;
     
     try {
       const transaction = await sendGreeting(message);
@@ -64,12 +64,12 @@ const DailyGreetings = ({ openTransactionModal }: DailyGreetingsProps) => {
               value={message}
               onChange={handleMessageChange}
               placeholder={t("enterGreetingMessage")}
-              rows={4}
-              maxLength={280}
+              rows={2}
+              maxLength={20}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
             />
             <div className="mt-1 flex justify-between">
-              <p className="text-xs text-gray-500">{message.length}/280</p>
+              <p className="text-xs text-gray-500">{message.length}/20</p>
               {messageError && <p className="text-xs text-red-500">{messageError}</p>}
             </div>
           </div>
