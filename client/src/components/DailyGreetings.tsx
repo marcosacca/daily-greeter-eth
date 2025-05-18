@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { useWallet } from "@/lib/hooks/useWallet";
 import { useGreeter } from "@/lib/hooks/useGreeter";
+import { useNFT } from "@/lib/hooks/useNFT";
 import { useTranslation } from "@/lib/hooks/useTranslation";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Loader2, Calendar, CheckCircle, Clock } from "lucide-react";
+import { Loader2, Calendar, CheckCircle, Clock, Sparkles } from "lucide-react";
 import { TransactionType } from "@/types";
 import { formatDate } from "@/lib/utils/format";
-import { GREETING_FEE, ESTIMATED_GAS } from "@/lib/constants";
+import { GREETING_FEE, NFT_MINTING_FEE, ESTIMATED_GAS } from "@/lib/constants";
+import { Switch } from "@/components/ui/switch";
 
 interface DailyGreetingsProps {
   openTransactionModal: (transaction: TransactionType) => void;
@@ -16,10 +18,15 @@ interface DailyGreetingsProps {
 const DailyGreetings = ({ openTransactionModal }: DailyGreetingsProps) => {
   const { t } = useTranslation();
   const { account } = useWallet();
-  const { lastGreetingDay, canSendGreetingToday, sendGreeting, isLoading } = useGreeter();
+  const { lastGreetingDay, canSendGreetingToday, sendGreeting, isLoading: isGreetingLoading } = useGreeter();
+  const { mintNFT, isLoading: isNFTLoading } = useNFT();
   
   const [message, setMessage] = useState("");
   const [messageError, setMessageError] = useState("");
+  const [mintAsNFT, setMintAsNFT] = useState(false);
+  const [title, setTitle] = useState("My Greeting NFT");
+  
+  const isLoading = isGreetingLoading || isNFTLoading;
   
   const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
@@ -36,7 +43,16 @@ const DailyGreetings = ({ openTransactionModal }: DailyGreetingsProps) => {
     if (!account || !message || message.length > 20 || isLoading) return;
     
     try {
-      const transaction = await sendGreeting(message);
+      let transaction;
+      
+      if (mintAsNFT) {
+        // Mint as NFT
+        transaction = await mintNFT(title, message);
+      } else {
+        // Send as regular greeting
+        transaction = await sendGreeting(message);
+      }
+      
       if (transaction) {
         openTransactionModal(transaction);
         setMessage("");
@@ -46,8 +62,8 @@ const DailyGreetings = ({ openTransactionModal }: DailyGreetingsProps) => {
     }
   };
   
-  // Calculate total ETH cost
-  const totalCost = GREETING_FEE + ESTIMATED_GAS;
+  // Calculate total ETH cost based on user choice
+  const totalCost = mintAsNFT ? (NFT_MINTING_FEE + ESTIMATED_GAS) : (GREETING_FEE + ESTIMATED_GAS);
   
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

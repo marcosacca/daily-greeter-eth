@@ -8,7 +8,7 @@ const AppHeader = () => {
   const { t } = useTranslation();
 
   return (
-    <header className="bg-gradient-to-r from-indigo-50 via-white to-blue-50 shadow-md">
+    <header className="bg-gradient-to-r from-gray-800 via-gray-900 to-gray-800 shadow-md border-b border-purple-900/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-5">
           <div className="logo-container">
