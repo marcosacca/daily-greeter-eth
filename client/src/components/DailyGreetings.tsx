@@ -10,6 +10,7 @@ import { TransactionType } from "@/types";
 import { formatDate } from "@/lib/utils/format";
 import { GREETING_FEE, NFT_MINTING_FEE, ESTIMATED_GAS } from "@/lib/constants";
 import { Switch } from "@/components/ui/switch";
+import { generateTextToSVG } from "@/lib/utils/web3";
 
 interface DailyGreetingsProps {
   openTransactionModal: (transaction: TransactionType) => void;
@@ -91,17 +92,51 @@ const DailyGreetings = ({ openTransactionModal }: DailyGreetingsProps) => {
             </div>
           </div>
           
-          <div className="mb-4 flex items-center space-x-2">
-            <Switch 
-              checked={mintAsNFT} 
-              onCheckedChange={setMintAsNFT} 
-              className="data-[state=checked]:bg-purple-500"
-            />
-            <span className="text-sm font-medium text-gray-300 flex items-center">
-              <Sparkles className="w-4 h-4 mr-1 text-purple-400" />
-              {mintAsNFT ? "Mint as NFT" : "Mint as NFT?"} 
-            </span>
+          <div className="mb-4 flex flex-col space-y-3">
+            <div className="flex items-center space-x-2">
+              <Switch 
+                checked={mintAsNFT} 
+                onCheckedChange={(checked) => {
+                  setMintAsNFT(checked);
+                  setShowNFTPreview(checked);
+                }} 
+                className="data-[state=checked]:bg-purple-500"
+              />
+              <span className="text-sm font-medium text-gray-300 flex items-center">
+                <Sparkles className="w-4 h-4 mr-1 text-purple-400" />
+                {mintAsNFT ? "Mint as NFT" : "Mint as NFT?"} 
+              </span>
+            </div>
+            
+            {mintAsNFT && (
+              <div className="pl-7">
+                <label htmlFor="nft-title" className="block text-sm font-medium text-gray-300 mb-1">
+                  Titolo NFT
+                </label>
+                <input
+                  id="nft-title"
+                  type="text"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary bg-gray-700 text-white text-sm"
+                  placeholder="Inserisci un titolo per il tuo NFT"
+                />
+              </div>
+            )}
           </div>
+          
+          {mintAsNFT && showNFTPreview && message && (
+            <div className="mb-6 overflow-hidden rounded-lg border border-purple-600/50 shadow-lg">
+              <div className="p-1 bg-gray-800">
+                <h3 className="text-sm font-medium text-center text-gray-200 mb-1">NFT Preview</h3>
+                <div className="aspect-square w-full max-h-[200px] overflow-hidden flex items-center justify-center bg-gray-900 relative">
+                  <div className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-purple-800 via-transparent to-transparent animate-pulse"></div>
+                  <div className="w-full h-full p-2 overflow-hidden" dangerouslySetInnerHTML={{ __html: generateTextToSVG(message, title) }} />
+                </div>
+                <p className="text-xs text-gray-400 text-center mt-1 px-2">Questo è come apparirà il tuo NFT</p>
+              </div>
+            </div>
+          )}
           
           <div className="mb-6 p-4 bg-gray-700 rounded-md border border-gray-600">
             <h3 className="text-sm font-medium text-gray-200 mb-2">{t("transactionDetails")}</h3>
