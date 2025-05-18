@@ -22,7 +22,7 @@
   "canSendTomorrow": "You can send another greeting tomorrow.",
   "connectToSeeStatus": "Connect your wallet to see your greeting status.",
   "howItWorks": "How It Works",
-  "writeGreeting": "Write a greeting message (max 280 chars)",
+  "writeGreeting": "Write a greeting message (max 20 chars)",
   "paySmallFee": "Pay a small fee (0.000015 ETH)",
   "greetingRecorded": "Your greeting is recorded on blockchain",
   "transactionSuccessful": "Transaction Successful",
